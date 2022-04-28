@@ -1,9 +1,6 @@
 const mongoose = require('mongoose')
 
-const calendarSchema = new mongoose.Schema({
-    title : {
-        type : String,
-    },
+const placeSchema = new mongoose.Schema({
     place : {
         type : String,
         required : true
@@ -12,12 +9,8 @@ const calendarSchema = new mongoose.Schema({
         type : String,
         required : true
     },
-    desc : {
+    cal : {
         type : String,
-    },
-    id : {
-        type : String,
-        required : true
     },
     createAt : {
         type : Date,
@@ -28,4 +21,4 @@ const calendarSchema = new mongoose.Schema({
 
 
 
-module.exports = mongoose.model('calendar' , calendarSchema)
+module.exports = mongoose.model('place' , placeSchema)

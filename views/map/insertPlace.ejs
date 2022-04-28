@@ -72,7 +72,8 @@
                     chk = 'N'
                 }
                 
-                $.ajax({
+            
+              $.ajax({
                     url : "/map/insertPlace",
                     type : "POST",
                     dataType : "json",
@@ -80,12 +81,19 @@
                         name, date, chk
                     },
                     success : function(data){
-                        console.log("data" , data)
+                       
+                        if(data.data === 'Y'){
+                            alert("달력에 추가했습니다.")
+                            window.location.href = '/calendar'
+                        }else{
+                            alert("저장을 완료했습니다.");
+                            window.history.back();
+                        }
                     },
                     error : function(err){
                         console.log('Error' , err)
                     }
-                })
+                }) 
                 
             }
         </script>

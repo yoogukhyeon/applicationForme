@@ -3,12 +3,14 @@ const router = express.Router();
 const Couple = require('../models/couple')
 const Search = require('../models/search')
 const Calendar = require('../models/calendar')
+const Place = require('../models/place')
 const short = require('short-uuid');
 const { db } = require('../models/couple');
 const resResult = require('./common/resResult')
 const shortid = require('shortid');
 const schedule = require('node-schedule');
 var HTMLParser = require('node-html-parser');
+
 //list
 router.get('/' , async(req, res) => {
         let {page , title} = req.query
@@ -359,5 +361,44 @@ router.get('/map/placeList' , async(req , res) => {
         console.error('Error' , err)
     }
 })
+
+//map placeList insert
+router.post('/map/insertPlace', async (req, res, next) =>{
+    let result = new Object();
+        const {name, date, chk} = req.body
+     
+        let id = shortid.generate()
+    try{    
+        
+        if(chk === 'Y'){
+            const createCal = await Calendar.create({
+                title : name,
+                place : name,
+                start : date,
+                id : id
+            })
+            const createPlace = await Place.create({
+                place : name,
+                start : date,
+                cal   : chk
+             }) 
+            
+        }else{
+            const createPlace = await Place.create({
+                place : name,
+                start : date,
+                cal   : chk
+             }) 
+        }
+
+    
+        result = resResult(true, 200, "데이터 전송 완료", chk);
+    }catch(e){
+        console.log(e);
+        result = resResult(false, 500, "알수없는 오류입니다. 관리자에게 문의해주세요.", e.message);
+    }finally{
+        res.send(result);
+    }   
+});
 
 module.exports = router;
