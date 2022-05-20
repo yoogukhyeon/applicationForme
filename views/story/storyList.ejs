@@ -59,24 +59,22 @@
         </div>
 
         <div class="bg-white p-5 rounded-2xl shadow-xl">
-            <h1>file</h1>
-        </div>
-
-        <div class="bg-white p-5 rounded-2xl shadow-xl">
-            <textarea name="content" id="" cols="30" rows="10"></textarea>
+            <textarea name="content" id="textarea" cols="30" rows="10" class="w-full outline-none border-2 p-3 border-slate-400 rounded-sm"></textarea>
         </div>
 
         <div class="shadow-xl flex justify-between items-center">
             <div class="w-2/4 bg-slate-100 p-4 text-left rounded-l-lg">
                 <a href="#"><i class="fa-solid fa-angle-left"></i><span class="p-2">이전글</span></a>
             </div>
-            <div class="w-2/4 text-right p-4 rounded-r-lg">
+            <div class="w-2/4 text-right p-4 rounded-r-lg" style="background-color: #ccc">
                 <a href="#"><span class="p-2">다음글</span><i class="fa-solid fa-angle-right"></i></a>
             </div>
         </div>
     </div>
 
-
+    <div class="fixed bottom-10 right-6 shadow-xl bg-slate-400 p-3 w-14 h-14 flex justify-center items-center z-10 rounded-full text-white transition-colors hover:bg-slate-500">
+        <a href="/story/insert" class="cursor-pointer"><i class="fa fa-plus" style="font-size: 24px;" ></i></a>
+    </div>
 
 </body>
 </html>
