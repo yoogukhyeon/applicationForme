@@ -4,18 +4,11 @@ const calendarSchema = new mongoose.Schema({
     title : {
         type : String,
     },
-    place : {
+    content : {
         type : String,
         required : true
     },
-    start : {
-        type : String,
-        required : true
-    },
-    desc : {
-        type : String,
-    },
-    id : {
+    img : {
         type : String,
         required : true
     },

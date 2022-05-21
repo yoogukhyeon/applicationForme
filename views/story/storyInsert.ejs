@@ -60,9 +60,10 @@
 
         <div class="bg-white p-5 rounded-2xl shadow-xl">
             <label for="image" class="form-label inline-block mb-2 text-gray-700">Upload image</label>
-            <form  method="POST" enctype="multipart/form-data" class="imgForm">
+            <form enctype="multipart/form-data" class="imgForm">
                 <input class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding
                 border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none" type="file" id="formFile" name="formFile">
+                <input type="hidden" class="hiddenImg">
             </form>
         </div>
 
@@ -113,25 +114,26 @@
         }
 
 
-       $('.imgForm').change(function(e){
-            let $row = $(this);
-            let form = $row[0];
-            let formData = new FormData(form);
-            formData.append('type','signal')
+        
 
-            console.log("formData", formData)
-            console.log("$row", $row)
+
+        $('.imgForm').on('change', function (e) {
+            var $row = $(this);
+            var form = $row[0];
+            var formData = new FormData(form);
+            formData.append('type','course')
 
             $.ajax({
-                    url : "/story/upload",
-                    type : "POST",
-                    dataType : "json",
-                    data : {    
-                        
-                    },
+                    url : "/story/upload/img",
+                    type : "post",
+                    data: formData,
+                    processData: false,
+                    contentType: false,
                     success : function(data){
-                       
-                    
+                       if(data.code === 200){
+                            $('.hiddenImg').val(data.data)
+                        }
+                      
                     },
                     error : function(err){
                         console.log('Error' , err)
@@ -139,6 +141,46 @@
                 }) 
 
         }) 
+
+
+        function insertData(){
+            
+            const title = $('#title').val();
+            const textarea = $('#textarea').val();
+            const imgName = $('.hiddenImg').val();
+            if(title === ""){
+                alert("제목을 입력해주세요.")
+                $('#title').focus();
+                return
+            };
+
+            if(textarea === ""){
+                alert("내용을 입력해주세요.")
+                $('#textarea').focus();
+                return
+            };
+
+        
+            $.ajax({
+                url : "/story/insert",
+                type : "POST",
+                dataType : "JSON",
+                data : {
+                    title, textarea, imgName
+                },
+                success : function(data){
+
+                },
+                error : function(err){
+                    console.error(err)
+                }
+            })
+
+        }
+
+      
+        
+
     </script>
 
 </body>
