@@ -130,10 +130,15 @@
                     processData: false,
                     contentType: false,
                     success : function(data){
-                       if(data.code === 200){
-                            $('.hiddenImg').val(data.data)
-                            alert("이미지 저장이 완료되었습니다.")
-                        }
+
+                        if(data.code === 200){
+                            if(data.data === ""){
+                                window.location.reload();
+                            }else{
+                                $('.hiddenImg').val(data.data)
+                                alert("이미지 저장이 완료되었습니다.")
+                            }
+                        } 
                       
                     },
                     error : function(err){
@@ -170,7 +175,10 @@
                     title, textarea, imgName
                 },
                 success : function(data){
-
+                    if(data.code === 200){
+                        alert("저장이 완료되었습니다.")
+                        window.location.href('/story/storylist')
+                    }
                 },
                 error : function(err){
                     console.error(err)

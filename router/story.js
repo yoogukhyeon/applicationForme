@@ -31,8 +31,21 @@ const upload = multer({
     },
   });
 
-router.get('/storylist', (req, res) => {
-    res.render('story/storyList')
+router.get('/storylist', async (req, res) => {
+    let storyList
+
+    try{  
+
+      storyList = await story.find().sort({"_id" : -1}).limit(10)
+
+      console.log("storyList", storyList)
+
+    }catch(e){
+      console.error(e);
+    }finally{
+      res.render('story/storyList')
+    }
+   
 })
 
 router.get('/insert', (req, res) => {
@@ -42,8 +55,9 @@ router.get('/insert', (req, res) => {
 router.post('/upload/img', upload.single('formFile'),  async(req, res) => {
     let result = new Object();
 
-    const fileName = req.file.filename;
+    const fileName = req.file ? req.file.filename : "";
     try{
+     
 
         
       result = resResult(true, 200, "데이터 전송 완료", fileName);
@@ -56,7 +70,7 @@ router.post('/upload/img', upload.single('formFile'),  async(req, res) => {
 })
 
 
-router.post('/insert', upload.single('formFile'),  async(req, res) => {
+router.post('/insert',  async(req, res) => {
     let result = new Object();
     const {title, textarea, imgName} = req.body
   

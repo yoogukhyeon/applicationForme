@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
 
-const calendarSchema = new mongoose.Schema({
+const storySchema = new mongoose.Schema({
     title : {
         type : String,
     },
@@ -21,4 +21,4 @@ const calendarSchema = new mongoose.Schema({
 
 
 
-module.exports = mongoose.model('story' , calendarSchema)
+module.exports = mongoose.model('story' , storySchema)
