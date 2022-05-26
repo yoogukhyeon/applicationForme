@@ -76,13 +76,26 @@ router.post('/insert',  async(req, res) => {
   
   try{   
 
-    const resultData = await story.create({
-        title : title,
-        content : textarea,
-        img : imgName
-    })
-
+    let randomNum = Math.floor(Math.random() * 400);
+    
+    const findSlug = await story.findOne({slug : randomNum})
+    const id = findSlug.slug
+    
+    if(!findSlug){    
+      const resultData = await story.create({
+          slug : randomNum,
+          title : title,
+          content : textarea,
+          img : imgName
+      }) 
+    }else{
+      randomNum = Math.floor(Math.random() * 600);
+      const updateData = await Calendar.findOneAndUpdate({id} , {
+            slug : randomNum,
+      })
       
+    }
+
     result = resResult(true, 200, "데이터 전송 완료", "");
   }catch(e){
       console.log(e);
