@@ -36,14 +36,15 @@ router.get('/storylist', async (req, res) => {
 
     try{  
 
-      storyList = await story.find().sort({"_id" : -1}).limit(10)
+      storyList = await story.find().sort({"_id" : -1})
+
 
       console.log("storyList", storyList)
 
     }catch(e){
       console.error(e);
     }finally{
-      res.render('story/storyList')
+      res.render('story/storyList', {storyList})
     }
    
 })
@@ -79,7 +80,6 @@ router.post('/insert',  async(req, res) => {
     let randomNum = Math.floor(Math.random() * 400);
     
     const findSlug = await story.findOne({slug : randomNum})
-    const id = findSlug.slug
     
     if(!findSlug){    
       const resultData = await story.create({
@@ -89,6 +89,9 @@ router.post('/insert',  async(req, res) => {
           img : imgName
       }) 
     }else{
+
+      const id = findSlug.slug
+
       randomNum = Math.floor(Math.random() * 600);
       const updateData = await Calendar.findOneAndUpdate({id} , {
             slug : randomNum,

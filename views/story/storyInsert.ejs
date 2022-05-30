@@ -175,9 +175,10 @@
                     title, textarea, imgName
                 },
                 success : function(data){
+                    console.log("data", data)
                     if(data.code === 200){
                         alert("저장이 완료되었습니다.")
-                        window.location.href('/story/storylist')
+                        window.location.href = '/story/storylist'
                     }
                 },
                 error : function(err){
