@@ -33,18 +33,57 @@ const upload = multer({
 
 router.get('/storylist', async (req, res) => {
     let storyList
-
+    let {page} = req.query
     try{  
 
-      storyList = await story.find().sort({"_id" : -1})
+      const totalCnt = await story.countDocuments()
+
+      const maxPost = 5;
+      const maxPage = 5;
+
+      let currentPage = page ? Number(page) : 1;
+      currentPage = page  <= 1 ? 1 : 1;
+      let hidePost = page === 1 ? 0 : (page - 1) * maxPost; 
+          hidePost = page <= 1 ? 0 : (page - 1) * maxPost; 
+      let totalPage = Math.ceil(totalCnt / maxPost);
+          totalPage = totalPage < 1 ? 1 : 1;
 
 
-      console.log("storyList", storyList)
+      if(currentPage > totalPage){
+          currentPage = totalPage
+
+          res.redirect(`/?page=${currentPage}`)
+      }
+      
+
+      if(currentPage < 1){
+          currentPage = 1
+
+          res.redirect(`/?page=${currentPage}`)
+      }
+
+
+      const startPage = Math.floor(((currentPage - 1) / maxPage)) * maxPage + 1; 
+      let endPage = startPage + maxPage - 1;
+    
+      if (endPage > totalPage) { 
+        endPage = totalPage;
+      }
+
+      storyList = await story.find().sort({"_id" : -1}).skip(hidePost).limit(maxPost)
+
+      res.render('story/storyList', {storyList
+              , startPage, 
+              endPage, 
+              hidePost, 
+              maxPost, 
+              totalPage, 
+              currentPage,
+              page,
+            })
 
     }catch(e){
       console.error(e);
-    }finally{
-      res.render('story/storyList', {storyList})
     }
    
 })
@@ -106,6 +145,45 @@ router.post('/insert',  async(req, res) => {
   }finally{
       res.send(result);
   } 
+})
+
+
+
+router.get('/storylist/:no', async (req, res) => {
+      const {no} = req.params
+  try{
+    const detail = await story.findOne({slug : no}).exec();
+    
+    res.render('story/storyUpdate', {detail})
+  }catch(err){
+    console.error(err)
+  }
+  
+
+})
+
+
+router.put('/update',  async(req, res) => {
+  let result = new Object();
+  const {title, textarea, imgName, slug} = req.body
+
+try{   
+
+  const update = await story.findOneAndUpdate({slug : slug}, {
+        title : title,
+        content : textarea,
+        img : imgName,
+        createAt : Date.now()
+                        
+  })
+
+  result = resResult(true, 200, "데이터 전송 완료", "");
+}catch(e){
+    console.log(e);
+    result = resResult(false, 500, "알수없는 오류입니다. 관리자에게 문의해주세요.", e.message);
+}finally{
+    res.send(result);
+} 
 })
 
 module.exports = router;
