@@ -53,7 +53,7 @@
         <div class="bg-white p-5 rounded-2xl shadow-xl">
             <div class="swiper mySwiper">
                 <div class="swiper-wrapper">
-                  <div class="swiper-slide"><img src="" alt="" class="w-full" id="img"></div>
+                  <div class="swiper-slide"><img src="/uploades/images/<%= detail.img %>" alt="" class="w-full" id="img"></div>
                 </div>
               </div>
         </div>
@@ -62,29 +62,41 @@
             <label for="image" class="form-label inline-block mb-2 text-gray-700">Upload image</label>
             <form enctype="multipart/form-data" class="imgForm">
                 <input class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding
-                border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none" type="file" id="formFile" name="formFile">
-                <input type="hidden" class="hiddenImg">
+                border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none" type="file" id="formFile" name="formFile" value="<%= detail.img %>">
+                <input type="hidden" class="hiddenImg" value="<%= detail.img %>">
             </form>
         </div>
 
         <div class="bg-white p-5 rounded-2xl shadow-xl">
             <label for="title" class="form-label inline-block mb-2 text-gray-700">제목</label>
-            <input placeholder="제목을 입력해주세요." name="title" id="title" class="w-full outline-none border-2 p-3 border-slate-400 rounded-sm" />
+            <input placeholder="제목을 입력해주세요." name="title" id="title" class="w-full outline-none border-2 p-3 border-slate-400 rounded-sm" value="<%= detail.title %>" />
         </div>
 
         <div class="bg-white p-5 rounded-2xl shadow-xl">
             <label for="textarea" class="form-label inline-block mb-2 text-gray-700">내용</label>
-            <textarea placeholder="내용을 입력해주세요." name="content" id="textarea" cols="30" rows="10" class="w-full outline-none border-2 p-3 border-slate-400 rounded-sm"></textarea>
+            <textarea placeholder="내용을 입력해주세요." name="content" id="textarea" cols="30" rows="10" class="w-full outline-none border-2 p-3 border-slate-400 rounded-sm"><%= detail.content %></textarea>
         </div>
 
         <div class="bg-white p-5 rounded-2xl shadow-xl text-center">
-            <button type="button" class="w-2/5 text-white bg-slate-400 hover:bg-slate-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" onclick="insertData()">저장</button>
+            <button type="button" class="w-2/5 text-white bg-slate-400 hover:bg-slate-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" onclick="updateData()">수정</button>
         </div>
 
-  
+        
+
+        <div class="shadow-xl flex justify-between items-center">
+            <div class="w-2/4 bg-slate-100 p-4 text-left rounded-l-lg">
+                <a href="#"><i class="fa-solid fa-angle-left"></i><span class="p-2">이전글</span></a>
+            </div>
+            <div class="w-2/4 text-right p-4 rounded-r-lg" style="background-color: #ccc">
+                <a href="#"><span class="p-2">다음글</span><i class="fa-solid fa-angle-right"></i></a>
+            </div>
+        </div>
+
     </div>
 
     <script>
+        const slug = '<%= detail.slug %>'
+
         let text = document.getElementById("textarea").value;
         text = text.replaceAll(/(\n|\r\n)/g, "<br>");
         
@@ -121,7 +133,7 @@
             var $row = $(this);
             var form = $row[0];
             var formData = new FormData(form);
-            formData.append('type','storyImg')
+            formData.append('type','course')
 
             $.ajax({
                     url : "/story/upload/img",
@@ -149,7 +161,7 @@
         }) 
 
 
-        function insertData(){
+        function updateData(){
             
             const title = $('#title').val();
             const textarea = $('#textarea').val();
@@ -168,11 +180,11 @@
 
         
             $.ajax({
-                url : "/story/insert",
-                type : "POST",
+                url : "/story/update",
+                type : "PUT",
                 dataType : "JSON",
                 data : {
-                    title, textarea, imgName
+                    title, textarea, imgName, slug
                 },
                 success : function(data){
                     console.log("data", data)

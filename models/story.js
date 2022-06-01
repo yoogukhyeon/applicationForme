@@ -1,6 +1,11 @@
 const mongoose = require('mongoose')
 
-const calendarSchema = new mongoose.Schema({
+const storySchema = new mongoose.Schema({
+    slug : {
+        type : String,
+        required : true,
+        unique: true
+    },
     title : {
         type : String,
     },
@@ -21,4 +26,4 @@ const calendarSchema = new mongoose.Schema({
 
 
 
-module.exports = mongoose.model('story' , calendarSchema)
+module.exports = mongoose.model('story' , storySchema)
